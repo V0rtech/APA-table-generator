@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APA 7 Table Generator - Professional Academic Tool</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            --secondary-gradient: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            --dark-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.37);
+            --shadow-dark: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --accent-blue: #4299e1;
+            --accent-green: #68d391;
+            --accent-orange: #ed8936;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        body::before {
+            display: none;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: visible;
+            position: relative;
+        }
+
+        .container::before {
+            display: none;
+        }
+
+        @keyframes containerShimmer {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .header {
+            background: transparent;
+            color: white;
+            padding: 80px 50px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #cbd5e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .header .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.85;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            min-height: 800px;
+            background: linear-gradient(145deg, #ffffff 0%, #f7fafc 100%);
+            border-radius: 24px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: -20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .controls {
+            background: transparent;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .controls::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.03), transparent);
+            animation: controlsShimmer 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes controlsShimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .controls-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .controls-header h2 {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .controls-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .control-group {
+            margin-bottom: 30px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-size: 1rem;
+            position: relative;
+            letter-spacing: 0.3px;
+        }
+
+        .control-group label::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-blue), transparent);
+            transition: width 0.3s ease;
+        }
+
+        .control-group:hover label::after {
+            width: 40px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 18px 22px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+            backdrop-filter: blur(10px);
+            letter-spacing: 0.3px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 30px rgba(66, 153, 225, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1) inset;
+            transform: translateY(-2px);
+        }
+
+        .size-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 8px 4px;
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 85, 104, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #a0aec0, #718096);
+            box-shadow: 0 4px 12px rgba(160, 174, 192, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #68d391, #48bb78);
+            box-shadow: 0 4px 12px rgba(104, 211, 145, 0.4);
+        }
+
+        .btn-export {
+            background: var(--secondary-gradient);
+            box-shadow: 0 4px 12px rgba(113, 128, 150, 0.4);
+        }
+
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .preset-buttons .btn {
+            margin: 0;
+            font-size: 12px;
+            padding: 12px 16px;
+        }
+
+        .format-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(226, 232, 240, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-blue);
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .preview-area {
+            padding: 40px;
+            background: transparent;
+            position: relative;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .preview-header h2 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .preview-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .apa-table-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .apa-table-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--primary-gradient));
+        }
+
+        .apa-table-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: tableShimmer 4s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes tableShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* APA 7 Table Styles */
+        .apa-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Times New Roman', serif;
+            font-size: 12pt;
+            margin: 20px 0;
+            background: white;
+        }
+
+        .apa-table caption {
+            caption-side: top;
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 14pt;
+            color: var(--text-primary);
+        }
+
+        .apa-table th {
+            border-top: 2px solid #000;
+            border-bottom: 1px solid #000;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: bold;
+            background: rgba(226, 232, 240, 0.1);
+            position: relative;
+        }
+
+        .apa-table td {
+            padding: 10px 16px;
+            border: none;
+            text-align: left;
+            transition: background-color 0.2s ease;
+        }
+
+        .apa-table tbody tr:hover td {
+            background: rgba(226, 232, 240, 0.1);
+        }
+
+        .apa-table tbody tr:last-child td {
+            border-bottom: 2px solid #000;
+        }
+
+        .apa-table .number-col {
+            text-align: right;
+        }
+
+        .table-note {
+            font-style: italic;
+            font-size: 10pt;
+            margin-top: 15px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            padding: 15px;
+            background: rgba(226, 232, 240, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .data-input-area {
+            margin-top: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .section-header h3 {
+            color: var(--text-primary);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-blue);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .data-grid {
+            display: grid;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .data-cell {
+            padding: 12px 16px;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .data-cell:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+        }
+
+        .export-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .export-btn {
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(113, 128, 150, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(113, 128, 150, 0.5);
+        }
+
+        .export-btn:active {
+            transform: translateY(0);
+        }
+
+        .code-output {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: rgba(226, 232, 240, 0.1);
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                border-right: none;
+                border-bottom: 1px solid #e0e6ed;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                margin: 10px;
+                border-radius: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .controls, .preview-area {
+                padding: 25px;
+            }
+
+            .preset-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .export-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success animation */
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-green);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            font-weight: 600;
+        }
+
+        .success-message.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>APA 7 Table Generator</h1>
+            <p class="subtitle">Create professional, publication-ready tables with ease</p>
+        </div>
+
+        <div class="main-content">
+            <div class="controls">
+                <div class="controls-header">
+                    <h2>Table Configuration</h2>
+                    <p>Customize your table settings below</p>
+                </div>
+
+                <div class="control-group">
+                    <label for="tableTitle">Table Title</label>
+                    <input type="text" id="tableTitle" placeholder="e.g., Descriptive Statistics for Study Variables" value="Descriptive Statistics for Study Variables">
+                </div>
+
+                <div class="control-group">
+                    <label>Table Dimensions</label>
+                    <div class="size-inputs">
+                        <input type="number" id="rows" placeholder="Rows" value="4" min="2" max="20">
+                        <input type="number" id="cols" placeholder="Columns" value="4" min="2" max="10">
+                    </div>
+                    <button class="btn" onclick="generateTable()">Generate Table</button>
+                </div>
+
+                <div class="preset-buttons">
+                    <button class="btn btn-secondary" onclick="applyPreset('light')">Research</button>
+                    <button class="btn btn-secondary" onclick="applyPreset('medium')">Statistics</button>
+                    <button class="btn btn-secondary" onclick="applyPreset('deep')">Correlation</button>
+                    <button class="btn btn-secondary" onclick="generateExample()">Example</button>
+                </div>
+
+                <div class="control-group">
+                    <label for="tableNote">Table Note (optional)</label>
+                    <textarea id="tableNote" rows="3" placeholder="Note. N = 150. All correlations significant at p < .05."></textarea>
+                </div>
+
+                <div class="format-options">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="showNumbers" checked>
+                        <label for="showNumbers">Right-align numeric columns</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="boldHeaders" checked>
+                        <label for="boldHeaders">Bold header text</label>
+                    </div>
+                </div>
+
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-number" id="rowCount">4</span>
+                        <span class="stat-label">Rows</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="colCount">4</span>
+                        <span class="stat-label">Columns</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="cellCount">16</span>
+                        <span class="stat-label">Cells</span>
+                    </div>
+                </div>
+
+                <div class="export-buttons">
+                    <button class="btn btn-success" onclick="exportToWord()">Export Word</button>
+                    <button class="btn btn-export" onclick="resetControls()">Reset</button>
+                </div>
+            </div>
+
+            <div class="preview-area">
+                <div class="preview-header">
+                    <h2>Live Preview</h2>
+                    <p>Your table will appear exactly as shown below</p>
+                </div>
+
+                <div class="apa-table-container">
+                    <table class="apa-table" id="apaTable">
+                        <caption id="tableCaption">Descriptive Statistics for Study Variables</caption>
+                        <thead>
+                            <tr id="headerRow">
+                                <th>Variable</th>
+                                <th>M</th>
+                                <th>SD</th>
+                                <th>Range</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td>Age</td>
+                                <td class="number-col">25.4</td>
+                                <td class="number-col">3.2</td>
+                                <td>18-35</td>
+                            </tr>
+                            <tr>
+                                <td>Education (years)</td>
+                                <td class="number-col">15.8</td>
+                                <td class="number-col">2.1</td>
+                                <td>12-20</td>
+                            </tr>
+                            <tr>
+                                <td>Income ($1000s)</td>
+                                <td class="number-col">45.6</td>
+                                <td class="number-col">12.3</td>
+                                <td>20-85</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="table-note" id="tableNoteDisplay">
+                        Note. N = 150. M = mean; SD = standard deviation.
+                    </div>
+                </div>
+
+                <div class="data-input-area">
+                    <div class="section-header">
+                        <div class="section-icon">✏</div>
+                        <h3>Edit Table Data</h3>
+                    </div>
+                    <div class="data-grid" id="dataGrid">
+                        <!-- Data input grid will be generated here -->
+                    </div>
+                </div>
+
+                <div class="output-section">
+                    <div class="section-header">
+                        <div class="section-icon">↗</div>
+                        <h3>Export Options</h3>
+                    </div>
+                    
+                    <div class="export-buttons">
+                        <button class="export-btn" onclick="copyHTML()">Copy HTML</button>
+                        <button class="export-btn" onclick="copyLaTeX()">Copy LaTeX</button>
+                        <button class="export-btn" onclick="copyMarkdown()">Copy Markdown</button>
+                        <button class="export-btn" onclick="copyCSV()">Copy CSV</button>
+                    </div>
+                    
+                    <div class="code-output" id="codeOutput">Click any export button above to see the generated code here...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRows = 4;
+        let currentCols = 4;
+        let tableData = [];
+
+        // Initialize with default data
+        function initializeDefaultData() {
+            tableData = [
+                ['Variable', 'M', 'SD', 'Range'],
+                ['Age', '25.4', '3.2', '18-35'],
+                ['Education (years)', '15.8', '2.1', '12-20'],
+                ['Income ($1000s)', '45.6', '12.3', '20-85']
+            ];
+        }
+
+        function generateTable() {
+            const rows = parseInt(document.getElementById('rows').value);
+            const cols = parseInt(document.getElementById('cols').value);
+            
+            if (rows < 2 || cols < 2 || rows > 20 || cols > 10) {
+                showMessage('Please enter valid dimensions (2-20 rows, 2-10 columns)', 'error');
+                return;
+            }
+
+            currentRows = rows;
+            currentCols = cols;
+
+            // Initialize table data array
+            tableData = [];
+            for (let i = 0; i < rows; i++) {
+                tableData[i] = [];
+                for (let j = 0; j < cols; j++) {
+                    if (i === 0) {
+                        tableData[i][j] = `Header ${j + 1}`;
+                    } else {
+                        tableData[i][j] = `Data ${i}.${j + 1}`;
+                    }
+                }
+            }
+
+            updateTable();
+            generateDataGrid();
+            updateStats();
+            showMessage('Table generated successfully!', 'success');
+        }
+
+        function updateTable() {
+            const table = document.getElementById('apaTable');
+            const headerRow = document.getElementById('headerRow');
+            const tableBody = document.getElementById('tableBody');
+            const showNumbers = document.getElementById('showNumbers').checked;
+
+            // Clear existing content
+            headerRow.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            // Generate headers
+            for (let j = 0; j < currentCols; j++) {
+                const th = document.createElement('th');
+                th.textContent = tableData[0][j];
+                if (showNumbers && j > 0) {
+                    th.classList.add('number-col');
+                }
+                headerRow.appendChild(th);
+            }
+
+            // Generate body rows
+            for (let i = 1; i < currentRows; i++) {
+                const tr = document.createElement('tr');
+                for (let j = 0; j < currentCols; j++) {
+                    const td = document.createElement('td');
+                    const cellValue = tableData[i][j];
+                    
+                    if (showNumbers && j > 0) {
+                        // Check if it's a number (has numeric value)
+                        if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue.replace(/[^\d.-]/g, ''))) {
+                            // It's a number (possibly with symbols) - normal display
+                            td.textContent = cellValue;
+                            td.classList.add('number-col');
+                        } else {
+                            // It's not a number (symbols, letters, etc.) - add invisible alignment
+                            td.innerHTML = '<span style="visibility: hidden;">0</span>' + cellValue;
+                            td.classList.add('number-col');
+                        }
+                    } else {
+                        // First column or numbers not enabled - normal left alignment
+                        td.textContent = cellValue;
+                    }
+                    
+                    tr.appendChild(td);
+                }
+                tableBody.appendChild(tr);
+            }
+
+            updateTableTitle();
+            updateTableNote();
+        }
+
+        function generateDataGrid() {
+            const dataGrid = document.getElementById('dataGrid');
+            dataGrid.innerHTML = '';
+            dataGrid.style.gridTemplateColumns = `repeat(${currentCols}, 1fr)`;
+
+            for (let i = 0; i < currentRows; i++) {
+                for (let j = 0; j < currentCols; j++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'data-cell';
+                    input.value = tableData[i][j];
+                    input.placeholder = `R${i + 1}C${j + 1}`;
+                    input.addEventListener('input', function() {
+                        tableData[i][j] = this.value;
+                        updateTable();
+                    });
+                    dataGrid.appendChild(input);
+                }
+            }
+        }
+
+        function updateTableTitle() {
+            const title = document.getElementById('tableTitle').value;
+            document.getElementById('tableCaption').textContent = title;
+        }
+
+        function updateTableNote() {
+            const note = document.getElementById('tableNote').value;
+            const noteDisplay = document.getElementById('tableNoteDisplay');
+            if (note.trim()) {
+                noteDisplay.textContent = note;
+                noteDisplay.style.display = 'block';
+            } else {
+                noteDisplay.style.display = 'none';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('rowCount').textContent = currentRows;
+            document.getElementById('colCount').textContent = currentCols;
+            document.getElementById('cellCount').textContent = currentRows * currentCols;
+        }
+
+        function generateExample() {
+            // Load example data
+            document.getElementById('tableTitle').value = 'Correlation Matrix for Study Variables';
+            document.getElementById('rows').value = 5;
+            document.getElementById('cols').value = 5;
+            document.getElementById('tableNote').value = 'Note. N = 200. * p < .05. ** p < .01. *** p < .001.';
+            
+            currentRows = 5;
+            currentCols = 5;
+            
+            tableData = [
+                ['Variable', '1', '2', '3', '4'],
+                ['1. Self-esteem', '—', '', '', ''],
+                ['2. Depression', '-.45***', '—', '', ''],
+                ['3. Anxiety', '-.38**', '.62***', '—', ''],
+                ['4. Social support', '.52***', '-.41**', '-.35*', '—']
+            ];
+
+            updateTable();
+            generateDataGrid();
+            updateTableNote();
+            updateStats();
+            showMessage('Example correlation matrix loaded!', 'success');
+        }
+
+        function applyPreset(type) {
+            const presets = {
+                light: {
+                    title: 'Descriptive Statistics for Study Variables',
+                    rows: 4, cols: 4,
+                    data: [
+                        ['Variable', 'M', 'SD', 'Range'],
+                        ['Age', '25.4', '3.2', '18-35'],
+                        ['Education', '15.8', '2.1', '12-20'],
+                        ['Income', '45.6', '12.3', '20-85']
+                    ],
+                    note: 'Note. N = 150. M = mean; SD = standard deviation.'
+                },
+                medium: {
+                    title: 'ANOVA Results for Treatment Groups',
+                    rows: 4, cols: 5,
+                    data: [
+                        ['Source', 'df', 'SS', 'MS', 'F'],
+                        ['Treatment', '2', '45.23', '22.62', '12.45***'],
+                        ['Error', '147', '267.34', '1.82', ''],
+                        ['Total', '149', '312.57', '', '']
+                    ],
+                    note: 'Note. *** p < .001.'
+                },
+                deep: {
+                    title: 'Regression Analysis Summary',
+                    rows: 5, cols: 6,
+                    data: [
+                        ['Predictor', 'B', 'SE B', 'β', 't', 'p'],
+                        ['Constant', '12.45', '2.34', '', '5.32', '<.001'],
+                        ['Age', '0.23', '0.08', '.34', '2.88', '.005'],
+                        ['Education', '1.56', '0.45', '.28', '3.47', '.001'],
+                        ['Income', '0.001', '0.0003', '.25', '3.33', '.001']
+                    ],
+                    note: 'Note. R² = .45, F(3, 146) = 39.82, p < .001.'
+                }
+            };
+            
+            const preset = presets[type];
+            document.getElementById('tableTitle').value = preset.title;
+            document.getElementById('rows').value = preset.rows;
+            document.getElementById('cols').value = preset.cols;
+            document.getElementById('tableNote').value = preset.note;
+            
+            currentRows = preset.rows;
+            currentCols = preset.cols;
+            tableData = preset.data;
+            
+            updateTable();
+            generateDataGrid();
+            updateTableNote();
+            updateStats();
+            showMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} preset applied!`, 'success');
+        }
+
+        function resetControls() {
+            applyPreset('light');
+            document.getElementById('showNumbers').checked = true;
+            document.getElementById('boldHeaders').checked = true;
+            showMessage('Settings reset to defaults!', 'success');
+        }
+
+        function showMessage(text, type = 'success') {
+            // Remove existing messages
+            const existing = document.querySelector('.success-message');
+            if (existing) existing.remove();
+            
+            const message = document.createElement('div');
+            message.className = 'success-message';
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            setTimeout(() => message.classList.add('show'), 100);
+            setTimeout(() => {
+                message.classList.remove('show');
+                setTimeout(() => message.remove(), 500);
+            }, 3000);
+        }
+
+        function copyHTML() {
+            const tableContainer = document.querySelector('.apa-table-container');
+            const html = tableContainer.innerHTML;
+            
+            navigator.clipboard.writeText(html).then(() => {
+                document.getElementById('codeOutput').textContent = html;
+                showMessage('HTML code copied to clipboard!');
+            });
+        }
+
+        function copyLaTeX() {
+            let latex = '\\begin{table}[htbp]\n\\centering\n';
+            latex += `\\caption{${document.getElementById('tableTitle').value}}\n`;
+            latex += '\\begin{tabular}{' + 'l'.repeat(currentCols) + '}\n';
+            latex += '\\toprule\n';
+            
+            // Headers
+            latex += tableData[0].join(' & ') + ' \\\\\n';
+            latex += '\\midrule\n';
+            
+            // Data rows
+            for (let i = 1; i < currentRows; i++) {
+                latex += tableData[i].join(' & ') + ' \\\\\n';
+            }
+            
+            latex += '\\bottomrule\n\\end{tabular}\n';
+            
+            const note = document.getElementById('tableNote').value;
+            if (note.trim()) {
+                latex += `\\begin{flushleft}\n\\textit{${note}}\n\\end{flushleft}\n`;
+            }
+            
+            latex += '\\end{table}';
+            
+            navigator.clipboard.writeText(latex).then(() => {
+                document.getElementById('codeOutput').textContent = latex;
+                showMessage('LaTeX code copied to clipboard!');
+            });
+        }
+
+        function copyMarkdown() {
+            let markdown = `**${document.getElementById('tableTitle').value}**\n\n`;
+            
+            // Headers
+            markdown += '| ' + tableData[0].join(' | ') + ' |\n';
+            markdown += '|' + '---|'.repeat(currentCols) + '\n';
+            
+            // Data rows
+            for (let i = 1; i < currentRows; i++) {
+                markdown += '| ' + tableData[i].join(' | ') + ' |\n';
+            }
+            
+            const note = document.getElementById('tableNote').value;
+            if (note.trim()) {
+                markdown += `\n*${note}*`;
+            }
+            
+            navigator.clipboard.writeText(markdown).then(() => {
+                document.getElementById('codeOutput').textContent = markdown;
+                showMessage('Markdown copied to clipboard!');
+            });
+        }
+
+        function copyCSV() {
+            let csv = '';
+            for (let i = 0; i < currentRows; i++) {
+                csv += tableData[i].map(cell => `"${cell}"`).join(',') + '\n';
+            }
+            
+            navigator.clipboard.writeText(csv).then(() => {
+                document.getElementById('codeOutput').textContent = csv;
+                showMessage('CSV data copied to clipboard!');
+            });
+        }
+
+        function exportToWord() {
+            try {
+                const tableTitle = document.getElementById('tableTitle').value;
+                const tableNote = document.getElementById('tableNote').value;
+                
+                // Generate simple HTML that Word can handle
+                let html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>APA Table</title>
+</head>
+<body style="font-family: 'Times New Roman', serif; font-size: 12pt; margin: 20px;">
+    
+    <p style="font-weight: bold; font-style: italic; margin-bottom: 10px;">${tableTitle}</p>
+    
+    <table style="border-collapse: collapse; margin: 20px 0; width: 100%;">
+        <thead>
+            <tr>`;
+                
+                // Add headers
+                for (let j = 0; j < currentCols; j++) {
+                    const width = j === 0 ? '40%' : `${60/(currentCols-1)}%`;
+                    html += `<th style="border-top: 2px solid black; border-bottom: 1px solid black; padding: 8px 12px; text-align: left; font-weight: bold; width: ${width};">${tableData[0][j]}</th>`;
+                }
+                
+                html += `</tr>
+        </thead>
+        <tbody>`;
+                
+                // Add data rows
+                for (let i = 1; i < currentRows; i++) {
+                    html += `<tr>`;
+                    for (let j = 0; j < currentCols; j++) {
+                        const cellValue = tableData[i][j];
+                        const isLastRow = (i === currentRows - 1);
+                        const borderStyle = isLastRow ? 'border-bottom: 2px solid black;' : '';
+                        const textAlign = (j > 0 && document.getElementById('showNumbers').checked) ? 'right' : 'left';
+                        
+                        html += `<td style="padding: 6px 12px; text-align: ${textAlign}; ${borderStyle}">${cellValue}</td>`;
+                    }
+                    html += `</tr>`;
+                }
+                
+                html += `</tbody>
+    </table>`;
+                
+                if (tableNote.trim()) {
+                    html += `<p style="font-style: italic; font-size: 10pt; margin-top: 10px;">${tableNote}</p>`;
+                }
+                
+                html += `</body>
+</html>`;
+                
+                // Create and download
+                const blob = new Blob([html], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'apa_table.doc';
+                link.click();
+                URL.revokeObjectURL(url);
+                
+                showMessage('Word document exported successfully!');
+                
+            } catch (error) {
+                console.error('Export failed:', error);
+                showMessage('Export failed. Please try again.', 'error');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('tableTitle').addEventListener('input', updateTableTitle);
+        document.getElementById('tableNote').addEventListener('input', updateTableNote);
+        document.getElementById('showNumbers').addEventListener('change', updateTable);
+        document.getElementById('boldHeaders').addEventListener('change', updateTable);
+
+        // Initialize
+        initializeDefaultData();
+        generateDataGrid();
+        updateTableNote();
+        updateTable();
+        updateStats();
+    </script>
+</body>
+</html>
